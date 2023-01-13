@@ -1,0 +1,156 @@
+Import pkg
+
+pkg("numpy")
+pkg("Dataframe")
+pkg("plot")
+pkg("FinancialToolbox")
+
+#stock price
+spot_price = 100
+​
+# Long put
+strike_price_long_put = 95
+premium_long_put = 0.89
+​
+# Short call
+strike_price_short_call = 105
+premium_short_call = 1.21
+​
+# Stock price range at expiration of the put
+sT = np.arange(0,2*spot_price,1)
+
+using FinancialToolbox
+
++def call_payoff(sT, strike_price, premium):
+return np.where(sT < strike_price, premium,+ premium -sT + strike_price)
+
+payoff_short_call = call_payoff (sT, strike_price_short_call, premium_short_call)
+
+def put_payoff(sT, strike_price, premium):
+return np.where(sT < strike_price, strike_price - sT, 0) - premium
+
+payoff_long_put = put_payoff(sT, strike_price_long_put, premium_long_put)
+
+payoff_collar = payoff_short_call + payoff_long_put
+​
+# Plot
+using Plots
+scatter(k,v,ylabel="value",ylims=(0,200))
+scatter!(k,0)
+savefig("C:/Users/user/Desktop/hw4-1.png")
+
+seaborn.set(style="darkgrid")
+
+def put_payoff(sT, strike_price, premium):
+     return np.where(sT < strike_price, strike_price - sT, 0) - premium
+
+#stock price
+spot_price = 100
+
+ # Long Put
+ strike_price_long_put = 95
+ premium_long_put = 0.89
+
+ # Short Put
+ strike_price_short_put = 100
+ premium_short_put = 1.21
+
+ # Range of put option at expiry
+ sT = np.arange(95,100,1)
+
+using FinancialToolbox
+
+long_put_payoff = put_payoff(sT, strike_price_long_put, premium_long_put)
+
+short_put_payoff = put_payoff(sT, strike_price_short_put, premium_short_put) * -1.0
+
+Put_payoff = long_put_payoff + short_put_payoff 
+
+using Plots
+scatter(k,v,ylabel="value",ylims=(0,200))
+scatter!(k,0)
+savefig("C:/Users/user/Desktop/hw4-2.png")
+
+
+
+import Pkg
+pkg("mibian")
+
+
+one_fut = 100
+two_fut = 105
+
+strike_price = 95
+one_price = 2*1.21
+two_price = 3.09
+setup_cost =two_price  - one_price
+
+days_to_expiry_one = 30
+days_to_expiry_two = 30
+
+sT = np.arange(1.21*2, 3.09, 1)
+
+interest_rate = 0.0
+
+
+jul_call_iv = mibian.BS([one_fut, strike_price, interest_rate, days_to_expiry_one],
+                        callPrice=one_price).impliedVolatility
+
+
+aug_call_iv = mibian.BS([two_fut, strike_price, interest_rate, days_to_expiry_two],
+                        callPrice=two_price).impliedVolatility
+
+days_to_expiry_one = 0.001
+days_to_expiry_two = 30 - days_to_expiry_one
+
+df = pd.DataFrame()
+df['strike price'] = sT
+df['one_price'] = np.nan
+df['two_price'] = np.nan
+
+using Plots
+scatter(k,v,ylabel="value",ylims=(0,200))
+scatter!(k,0)
+savefig("C:/Users/user/Desktop/hw4-3.png")
+
+
+def call_payoff(sT, strike_price, premium):
+return np.where(sT > strike_price, sT - strike_price, 0) – premium
+# Stock price
+spot_price = 100
+# Long call
+strike_price_long_call = 95
+premium_long_call =0.89
+# Short call
+strike_price_short_call = 100
+premium_short_call = 1.21
+# Stock price range at expiration of the call
+sT = np.arange(0.5*spot_price,2*spot_price,1)
+
+payoff_long_call = call_payoff(sT, strike_price_long_call, premium_long_call)
+
+payoff_short_call = call_payoff(sT, strike_price_short_call, premium_short_call) * -1.0
+
+def put_payoff(sT, strike_price, premium):
+return np.where(sT < strike_price, strike_price - sT, 0) – premium
+# Stock price
+spot_price = 100
+# Long put
+strike_price_long_put = 100
+premium_long_put = 0.89
+# Short put
+strike_price_short_put =105
+premium_short_put = 1.21
+# Stock price range at expiration of the put
+sT = np.arange(0.5*spot_price,2*spot_price,1)
+
+payoff_long_put = put_payoff(sT, strike_price_long_put, premium_long_put)
+
+payoff_short_put = put_payoff(sT, strike_price_short_put, premium_short_put) * -1.0
+
+payoff = payoff_long_call + payoff_short_call + payoff_long_put + payoff_short_put
+
+using Plots
+scatter(k,v,ylabel="value",ylims=(0,200))
+scatter!(k,0)
+savefig("C:/Users/user/Desktop/hw4-4.png")
